@@ -7,7 +7,7 @@ exports.getAppointments = async (req, res, next) => {
 
       console.log(error);
       query = Appointment.find({ user: req.user.id }).populate({
-        path: "hospital",
+        path: "hotel",
         select: "name province tel",
       });
 
@@ -16,12 +16,12 @@ exports.getAppointments = async (req, res, next) => {
       if (req.params.hospitalId) {
         console.log(req.params.hospitalId);
         query = Appointment.find({ hospital: req.params.hospitalId }).populate({
-          path: "hospital",
+          path: "hotel",
           select: "name province tel",
         });
       } else {
         query = Appointment.find().populate({
-          path: "hospital",
+          path: "hotel",
           select: "name province tel",
         });
       }
@@ -39,10 +39,10 @@ exports.addAppointment = async (req, res, next) => {
   try {
     req.body.user = req.user.id;
 
-    const hospital = await Hospital.findById(req.params.hospitalId);
+    const hotel = await Hospital.findById(req.params.hospitalId);
 
-    if (!hospital) {
-      return res.status(404).json({success: false, message: `No hospital with the id of ${req.params.hospitalId}`});
+    if (!hotel) {
+      return res.status(404).json({success: false, message: `No hospital with the id of ${req.params.hotelId}`});
     }
 
     const appointment = await Appointment.create(req.body);
@@ -58,7 +58,7 @@ exports.addAppointment = async (req, res, next) => {
 exports.getAppointment = async (req, res, next) => {
   try {
     const appointment = await Appointment.findById(req.params.id).populate({
-      path: "hospital",
+      path: "hotel",
       select: "name description tel",
     });
     if (!appointment) {

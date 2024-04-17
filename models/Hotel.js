@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const HospitalSchema = new mongoose.Schema(
+const HotelSchema = new mongoose.Schema(
   {
     name: {
         type: String,
@@ -40,16 +40,16 @@ const HospitalSchema = new mongoose.Schema(
   }
 );
 
-HospitalSchema.virtual("appointments", {
+HotelSchema.virtual("appointments", {
     ref: "Appointment",
     localField: "_id",
-    foreignField: "hospital",
+    foreignField: "hotel",
     justOne: false,
 });
 
-HospitalSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
-    console.log(`Appointment is being removed from hospital ${this._id}`);
-    await this.model("Appointment").deleteMany({ hospital: this._id });
+HotelSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
+    console.log(`Appointment is being removed from hotel ${this._id}`);
+    await this.model("Appointment").deleteMany({ hotel: this._id });
     next();
 });
-module.exports = mongoose.model("Hospital", HospitalSchema);
+module.exports = mongoose.model("Hotel", HotelSchema);

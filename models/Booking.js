@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const AppointmentSchema = new mongoose.Schema({
-  apptDate: {
+const BookingSchema = new mongoose.Schema({
+  bookDate: {
     type: Date,
     required: true,
   },
@@ -10,9 +10,9 @@ const AppointmentSchema = new mongoose.Schema({
     ref: "User", // Assuming you have a User model
     required: true,
   },
-  hospital: {
+  hotel: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Hospital", // Assuming you have a User model
+    ref: "Hotel", // Assuming you have a User model
     required: true,
   },
   createdAt: {
@@ -22,4 +22,4 @@ const AppointmentSchema = new mongoose.Schema({
 });
 
 // Create and export the model
-module.exports = mongoose.model("Appointment", AppointmentSchema);
+module.exports = mongoose.model("Booking", BookingSchema);

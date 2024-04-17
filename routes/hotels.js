@@ -1,4 +1,5 @@
 const express = require('express');
+
 const {
     getHotels,
     getHotel,
@@ -9,12 +10,14 @@ const {
 } = require('../controllers/hotels');
 
 const bookingRouter = require('./bookings');
+const reviewRouter = require('./reviews');
 
 const router = express.Router();
 
 const {protect, authorize} = require('../middleware/auth');
 
 router.use('/:hotelId/bookings/', bookingRouter);
+router.use('/:hotelId/reviews/', reviewRouter);
 
 router
     .route('/')

@@ -56,6 +56,7 @@ app.use(cors());
 app.use("/api/v1/hotels", hotel);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/bookings", bookings);
+app.use("/api/v1/reviews", reviews);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 const server = app.listen(

@@ -1,4 +1,5 @@
 const Booking = require("../models/Booking");
+const Hotel = require("../models/Hotel");
 
 exports.getBookings = async (req, res, next) => {
   let query;
@@ -37,6 +38,8 @@ exports.getBookings = async (req, res, next) => {
 
 exports.addBooking = async (req, res, next) => {
   try {
+    req.body.hotel = req.params.hotelId;
+
     req.body.user = req.user.id;
 
     const hotel = await Hotel.findById(req.params.hotelId);
@@ -47,7 +50,7 @@ exports.addBooking = async (req, res, next) => {
 
     const booking = await Booking.create(req.body);
 
-    res.status(200).json({ success: true, data: booking });
+    res.status(201).json({ success: true, data: booking });
   } catch (error) {
     console.log(error);
 
@@ -119,7 +122,10 @@ exports.updateBooking = async (req, res, next) => {
 
 exports.deleteBooking = async (req, res, next) => {
   try {
-    const booking = await Booking.findById(req.params.id);
+    req.body.hotel = req.params.hotelId;
+
+    const booking = await Booking.findByIdAndDelete(req.params.id);
+    
     if (!booking) {
       return res.status(404).json({
         success: false,
@@ -135,7 +141,6 @@ exports.deleteBooking = async (req, res, next) => {
         message: `User ${req.user.id} is not authorized to delete this booking`,
       });
     }
-    await Booking.deleteOne();
     res.status(200).json({
       success: true,
       data: {},

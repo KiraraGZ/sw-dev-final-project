@@ -12,10 +12,10 @@ exports.getAppointments = async (req, res, next) => {
       });
 
     } else {
-      console.log(req.params.hospitalId);
-      if (req.params.hospitalId) {
-        console.log(req.params.hospitalId);
-        query = Appointment.find({ hospital: req.params.hospitalId }).populate({
+      console.log(req.params.hotelId);
+      if (req.params.hotelId) {
+        console.log(req.params.hotelId);
+        query = Appointment.find({ hotel: req.params.hotelId }).populate({
           path: "hotel",
           select: "name province tel",
         });
@@ -39,10 +39,10 @@ exports.addAppointment = async (req, res, next) => {
   try {
     req.body.user = req.user.id;
 
-    const hotel = await Hospital.findById(req.params.hospitalId);
+    const hotel = await Hotel.findById(req.params.hotelId);
 
     if (!hotel) {
-      return res.status(404).json({success: false, message: `No hospital with the id of ${req.params.hotelId}`});
+      return res.status(404).json({success: false, message: `No hotel with the id of ${req.params.hotelId}`});
     }
 
     const appointment = await Appointment.create(req.body);

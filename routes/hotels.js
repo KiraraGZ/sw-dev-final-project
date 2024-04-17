@@ -1,12 +1,12 @@
 const express = require('express');
 const {
-    getHospitals,
-    getHospital,
-    createHospital,
-    updateHospital,
-    deleteHospital,
+    getHotels,
+    getHotel,
+    createHotel,
+    updateHotel,
+    deleteHotel,
     getVacCenters,
-} = require('../controllers/hospitals');
+} = require('../controllers/hotels');
 
 const appointmentRouter = require('./appointments');
 
@@ -14,21 +14,21 @@ const router = express.Router();
 
 const {protect, authorize} = require('../middleware/auth');
 
-router.use('/:hospitalId/appointments/', appointmentRouter);
+router.use('/:hotelId/appointments/', appointmentRouter);
 
 router
     .route('/')
-    .get(getHospitals)
-    .post(protect, authorize("admin"), createHospital)
+    .get(getHotels)
+    .post(protect, authorize("admin"), createHotel)
     
 router
     .route("/vacCenters").get(getVacCenters);
     
 router
     .route('/:id')
-    .get(getHospital)
-    .put(protect, authorize("admin"), updateHospital)
-    .delete(protect, authorize("admin"), deleteHospital)
+    .get(getHotel)
+    .put(protect, authorize("admin"), updateHotel)
+    .delete(protect, authorize("admin"), deleteHotel)
 
 /**
  * @swagger

@@ -8,13 +8,13 @@ const {
     getVacCenters,
 } = require('../controllers/hotels');
 
-const appointmentRouter = require('./appointments');
+const bookingRouter = require('./bookings');
 
 const router = express.Router();
 
 const {protect, authorize} = require('../middleware/auth');
 
-router.use('/:hotelId/appointments/', appointmentRouter);
+router.use('/:hotelId/bookings/', bookingRouter);
 
 router
     .route('/')

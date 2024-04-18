@@ -90,7 +90,10 @@ exports.getBooking = async (req, res, next) => {
 
 exports.updateBooking = async (req, res, next) => {
   try {
-    const booking = await Booking.findById(req.params.id);
+    const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
     if (!booking) {
       return res.status(404).json({
         success: false,
@@ -108,10 +111,6 @@ exports.updateBooking = async (req, res, next) => {
       });
     }
 
-    booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
     res.status(200).json({
       success: true,
       data: booking,

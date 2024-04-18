@@ -1,5 +1,6 @@
 const Review = require("../models/Review");
 const Hotel = require("../models/Hotel");
+const Booking = require("../models/Booking");
 
 exports.getReviews = async (req, res, next) => {
     let query;
@@ -47,7 +48,12 @@ exports.getReviews = async (req, res, next) => {
       if (!hotel) {
         return res.status(404).json({success: false, message: `No hotel with the id of ${req.params.hotelId}`});
       }
-  
+
+      const booking = await Booking.findById(req.body.booking)
+      if((Date.now() - booking.bookDate) / (1000 * 60 * 60 * 24) > 3) {
+        return res.status(404).json({success: false, message: `Exceed 3 days with the booking id of ${req.body.booking}`});
+      }
+
       const review = await Review.create(req.body);
   
       res.status(201).json({ success: true, data: review });

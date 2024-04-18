@@ -44,18 +44,21 @@ exports.addBooking = async (req, res, next) => {
 
     const hotel = await Hotel.findById(req.params.hotelId);
 
-    const booking = await Booking.create(req.body);
-    
-    const dayDuration = (booking.bookDate - booking.createdAt) / (1000 * 60 * 60 * 24);
-    if (dayDuration > 3) {
-      return res.status(401).json({success: false, message: `Book duration cannot be more than 3 days (${dayDuration} days)` });
-    }
-
     if (!hotel) {
       return res.status(404).json({success: false, message: `No hotel with the id of ${req.params.hotelId}`});
     }
 
-    res.status(201).json({ success: true, data: booking, message: `Duration (${dayDuration} days)`});
+    //Check fpr existed appointment
+    const existedBookings = await Booking.find({user:req.user.id});
+        
+    //If the user is not an admin, they can only create 3 bookings.
+    if(existedBookings.length >=3 && req.user.role !== 'admin'){
+        return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 bookings`});
+    }
+
+    const booking = await Booking.create(req.body);
+
+    res.status(201).json({ success: true, data: booking, message: `Booking Succesful`});
   } catch (error) {
     console.log(error);
 

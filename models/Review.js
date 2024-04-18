@@ -3,13 +3,22 @@ const mongoose = require("mongoose");
 const ReviewSchema = new mongoose.Schema({
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Assuming you have a User model
+      ref: "User", // Assuming you have a Booking model
       required: true,
     },
     hotel: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Hotel", // Assuming you have a User model
+      ref: "Hotel", // Assuming you have a Booking model
       required: true,
+    },
+    booking: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking", // Assuming you have a Booking model
+      required: true,
+    },
+    description: {
+      type: String,
+      required: [true, "Please add a description"],
     },
     rating: {
         type: Number,

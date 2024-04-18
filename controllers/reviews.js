@@ -51,10 +51,11 @@ exports.getReviews = async (req, res, next) => {
       const review = await Review.create(req.body);
   
       res.status(201).json({ success: true, data: review });
+
     } catch (error) {
       console.log(error);
   
-      return res.status(500).json({ success: false, message: "Cannot create Booking" });
+      return res.status(500).json({ success: false, message: "Cannot create Review" });
     }
   };
   
@@ -64,6 +65,7 @@ exports.getReviews = async (req, res, next) => {
         path: "hotel",
         select: "name description tel",
       });
+
       if (!review) {
         return res.status(404).json({
           success: false,
@@ -74,8 +76,10 @@ exports.getReviews = async (req, res, next) => {
         success: true,
         data: review,
       });
+
     } catch (error) {
       console.log(error);
+
       return res.status(500).json({
         success: false,
         message: `Cannot find review `,

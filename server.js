@@ -12,6 +12,7 @@ const hotel = require("./routes/hotels");
 const PORT = process.env.PORT || 5000;
 const auth = require("./routes/auth");
 const bookings = require("./routes/bookings");
+const reviews = require("./routes/reviews");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const {xss} = require('express-xss-sanitizer');

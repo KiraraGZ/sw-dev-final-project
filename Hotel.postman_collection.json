@@ -57,6 +57,53 @@
 					"response": []
 				},
 				{
+					"name": "Create New Hotel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"const new_hotel_id = response.data.id;\r",
+									"\r",
+									"pm.globals.set(\"global_hotel_id\", new_hotel_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"address\": \"{{$randomStreetAddress}}\",\r\n  \"district\": \"{{$randomCity}}\",\r\n  \"province\": \"{{$randomCity}}\",\r\n  \"postalcode\": \"10500\",\r\n  \"tel\": \"{{$randomPhoneNumber}}\",\r\n  \"region\": \"{{$randomCity}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/hotels",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"hotels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Single Hotel",
 					"event": [
 						{
@@ -115,53 +162,6 @@
 									"key": "hotel_id",
 									"value": "{{global_hotel_id}}"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create New Hotel",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});\r",
-									"\r",
-									"const response = pm.response.json();\r",
-									"const new_hotel_id = response.data.id;\r",
-									"\r",
-									"pm.globals.set(\"global_hotel_id\", new_hotel_id);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"address\": \"{{$randomStreetAddress}}\",\r\n  \"district\": \"{{$randomCity}}\",\r\n  \"province\": \"{{$randomCity}}\",\r\n  \"postalcode\": \"10500\",\r\n  \"tel\": \"{{$randomPhoneNumber}}\",\r\n  \"region\": \"{{$randomCity}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}}/api/v1/hotels",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"hotels"
 							]
 						}
 					},
@@ -251,6 +251,53 @@
 									"key": "hotel_id",
 									"value": "{{global_hotel_id}}"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Hotel Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"const new_hotel_id = response.data.id;\r",
+									"\r",
+									"pm.globals.set(\"global_hotel_id\", new_hotel_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"address\": \"{{$randomStreetAddress}}\",\r\n  \"district\": \"{{$randomCity}}\",\r\n  \"province\": \"{{$randomCity}}\",\r\n  \"postalcode\": \"10500\",\r\n  \"tel\": \"{{$randomPhoneNumber}}\",\r\n  \"region\": \"{{$randomCity}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/hotels",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"hotels"
 							]
 						}
 					},
@@ -433,9 +480,8 @@
 									"});\r",
 									"\r",
 									"const response = pm.response.json();\r",
-									"const new_booking_id = response.data._id;\r",
-									"\r",
 									"console.log(response);\r",
+									"const new_booking_id = response.data._id;\r",
 									"\r",
 									"pm.globals.set(\"global_booking_id\", new_booking_id);"
 								],
@@ -449,7 +495,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"bookDate\": \"{{$randomDateFuture}}\"\r\n}",
+							"raw": "{\r\n//   \"bookDate\": \"{{$randomDateFuture}}\"\r\n//   \"bookDate\": \"{{$randomDateRecent}}\"\r\n    \"bookDate\": \"2024-04-20T12:48:07.000Z\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -525,6 +571,20 @@
 			"item": [
 				{
 					"name": "Get All Reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -544,6 +604,20 @@
 				},
 				{
 					"name": "Get Single Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],

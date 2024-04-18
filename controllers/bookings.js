@@ -44,13 +44,18 @@ exports.addBooking = async (req, res, next) => {
 
     const hotel = await Hotel.findById(req.params.hotelId);
 
+    const booking = await Booking.create(req.body);
+    
+    const dayDuration = (booking.bookDate - booking.createdAt) / (1000 * 60 * 60 * 24);
+    if (dayDuration > 3) {
+      return res.status(401).json({success: false, message: `Book duration cannot be more than 3 days (${dayDuration} days)` });
+    }
+
     if (!hotel) {
       return res.status(404).json({success: false, message: `No hotel with the id of ${req.params.hotelId}`});
     }
 
-    const booking = await Booking.create(req.body);
-
-    res.status(201).json({ success: true, data: booking });
+    res.status(201).json({ success: true, data: booking, message: `Duration (${dayDuration} days)`});
   } catch (error) {
     console.log(error);
 

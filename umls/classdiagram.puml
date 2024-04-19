@@ -3,7 +3,6 @@
 left to right direction
 
 class App <<Application>> {
-  
 }
 
 class Hotels <<Resource>> {
@@ -12,9 +11,9 @@ class Hotels <<Resource>> {
 }
 
 class Hotel <<Resource>> {
-  <<GET>> + getHotel() : HotelSchema
-  <<PUT>> + updateHotel() : HotelSchema
-  <<DELETE>> + deleteHotel() : void
+  <<GET>> + getHotel(hotelId: ObjectId) : HotelSchema
+  <<PUT>> + updateHotel(hotelId: ObjectId) : HotelSchema
+  <<DELETE>> + deleteHotel(hotelId: ObjectId) : void
 }
 
 class Bookings <<Resource>> {
@@ -23,9 +22,9 @@ class Bookings <<Resource>> {
 }
 
 class Booking <<Resource>> {
-  <<GET>> + getBooking() : BookingSchema
-  <<PUT>> + updateBooking() : BookingSchema
-  <<DELETE>> + deleteBooking() : void
+  <<GET>> + getBooking(bookingId: ObjectId) : BookingSchema
+  <<PUT>> + updateBooking(bookingId: ObjectId) : BookingSchema
+  <<DELETE>> + deleteBooking(bookingId: ObjectId) : void
 }
 
 class Auth <<Resource>> {
@@ -65,13 +64,16 @@ class UserSchema <<Representation>> {
   +createdAt: Date
 }
 
-App --> Hotels
-App --> Bookings
-App --> Auth
-Auth --> UserSchema : <<use>>
-Hotels --> Hotel : /hotelId <<Path>>
-Hotel --> HotelSchema : <<use>>
-Bookings --> Booking : /bookingId <<Path>>
-Booking --> BookingSchema : <<use>>
+App --> Hotels : /hotels <<Path>>
+App --> Bookings : /bookings <<Path>>
+App --> Auth : /auth <<Path>>
+Auth --> UserSchema : uses 
+Hotels --> Hotel : /{hotelId} <<Path>>
+Hotel --> HotelSchema : uses
+
+Hotel --> Bookings : /bookings <<Path>>
+
+Bookings --> Booking : /{bookingId} <<Path>>
+Booking --> BookingSchema : uses
 
 @enduml

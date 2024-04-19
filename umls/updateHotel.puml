@@ -1,0 +1,25 @@
+@startuml
+
+header Admin Update Hotel
+
+actor user
+participant server <<javaScript>>
+participant hotels <<router>>
+participant hotels. <<controllers>>
+participant Hotel <<models>>
+participant hotelsDB <<MongoDB>>
+
+user -> server : req.put('/hotels/:id')
+server -> hotels : app.use("/hotels", hotels)
+alt is Admin
+    hotels -> hotels. : updateHotel
+    hotels. -> Hotel : findByIdAndUpdate(req.params.id, req.body)
+    Hotel -> hotelsDB : HotelSchema
+    hotelsDB -> Hotel : updatedHotel
+    Hotel -> hotels. : updatedHotel
+    hotels. -> user : updatedHotel
+else is not Admin
+    hotels -> user : not authorized to access this route
+end
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+
+header User Register
+
+actor user
+participant server <<javaScript>>
+participant auth <<router>>
+participant auth. <<controllers>>
+participant User <<models>>
+participant users <<MongoDB>>
+
+user -> server : req.post('/auth/register)
+server -> auth : app.use("/auth", auth)
+auth -> auth. : register
+auth. -> User : create(req.body)
+User -> users : UserSchema
+users -> User : user
+User -> auth. : user
+auth. -> user : response
+
+@enduml

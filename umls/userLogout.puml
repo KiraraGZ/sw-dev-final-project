@@ -1,0 +1,15 @@
+@startuml
+
+header User Logout
+
+actor user
+participant server <<javaScript>>
+participant auth <<router>>
+participant auth. <<controllers>>
+
+user -> server : req.post('/auth/logout')
+server -> auth : app.use("/auth", auth)
+auth -> auth. : logout
+auth. -> user : clear session
+
+@enduml

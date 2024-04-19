@@ -1,0 +1,21 @@
+@startuml
+
+header Delete Booking
+
+actor user
+participant server <<javaScript>>
+participant bookings <<router>>
+participant bookings. <<controllers>>
+participant Booking <<models>>
+participant hotelsDB <<MongoDB>>
+
+user -> server : req.delete('/bookings/:booking_id)
+server -> bookings : app.use("/bookings", bookings)
+bookings -> bookings. : deleteBooking
+bookings. -> Booking : findByIdAndDelete(req.params.id)
+Booking -> hotelsDB : BookingSchema
+hotelsDB -> Booking :
+Booking -> bookings. :
+bookings. -> user :
+
+@enduml

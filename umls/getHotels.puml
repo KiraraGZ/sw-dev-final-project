@@ -1,0 +1,21 @@
+@startuml
+
+header Get Hotels
+
+actor user
+participant server <<javaScript>>
+participant hotels <<router>>
+participant hotels. <<controllers>>
+participant Hotel <<models>>
+participant hotelsDB <<MongoDB>>
+
+user -> server : req.get('/hotels')
+server -> hotels : app.use("/hotels", hotels)
+hotels -> hotels. : getHotels
+hotels. -> Hotel : query
+Hotel -> hotelsDB : HotelSchema
+hotelsDB -> Hotel : hotels
+Hotel -> hotels. : hotels
+hotels. -> user : hotels
+
+@enduml

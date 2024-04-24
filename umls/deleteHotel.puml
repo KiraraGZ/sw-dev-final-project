@@ -1,0 +1,25 @@
+@startuml
+
+header Admin Delete Hotel
+
+actor user
+participant server <<javaScript>>
+participant hotels <<router>>
+participant hotels. <<controllers>>
+participant Hotel <<models>>
+participant hotelsDB <<MongoDB>>
+
+user -> server : req.delete('/hotels/:id')
+server -> hotels : app.use("/hotels", hotels)
+alt is Admin
+    hotels -> hotels. : deleteHotel
+    hotels. -> Hotel : findByIdAndDelete(req.params.id)
+    Hotel -> hotelsDB : findOneAndDelete
+    hotelsDB -> Hotel :
+    Hotel -> hotels. :
+    hotels. -> user :
+else is not Admin
+    hotels -> user : not authorized to access this route
+end
+
+@enduml

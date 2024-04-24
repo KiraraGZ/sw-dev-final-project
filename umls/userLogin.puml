@@ -1,0 +1,21 @@
+@startuml
+
+header User Login
+
+actor user
+participant server <<javaScript>>
+participant auth <<router>>
+participant auth. <<controllers>>
+participant User <<models>>
+participant users <<MongoDB>>
+
+user -> server : req.post('/auth/login')
+server -> auth : app.use("/auth", auth)
+auth -> auth. : login
+auth. -> User : findOne({email})
+User -> users : UserSchema
+users -> User : user
+User -> auth. : user
+auth. -> user : response with token
+
+@enduml

@@ -1,0 +1,79 @@
+@startuml Class Diagram
+
+left to right direction
+
+class App <<Application>> {
+}
+
+class Hotels <<Resource>> {
+  <<GET>> + getHotels() : HotelSchema
+  <<POST>> + createHotel() : HotelSchema
+}
+
+class Hotel <<Resource>> {
+  <<GET>> + getHotel(hotelId: ObjectId) : HotelSchema
+  <<PUT>> + updateHotel(hotelId: ObjectId) : HotelSchema
+  <<DELETE>> + deleteHotel(hotelId: ObjectId) : void
+}
+
+class Bookings <<Resource>> {
+  <<GET>> + getBookings() : BookingSchema
+  <<POST>> + createBooking() : BookingSchema
+}
+
+class Booking <<Resource>> {
+  <<GET>> + getBooking(bookingId: ObjectId) : BookingSchema
+  <<PUT>> + updateBooking(bookingId: ObjectId) : BookingSchema
+  <<DELETE>> + deleteBooking(bookingId: ObjectId) : void
+}
+
+class Auth <<Resource>> {
+  <<POST>> + register() : UserSchema
+  <<POST>> + login() : UserSchema
+  <<GET>> + me() : UserSchema
+  <<GET>> + logout() : void
+}
+
+class BookingSchema <<Representation>> {
+  +_id: ObjectId
+  +bookDate: Date
+  +user: ObjectId
+  +hotel: ObjectId
+  +createdAt: Date
+}
+
+class HotelSchema <<Representation>> {
+  +_id: ObjectId
+  +name: String
+  +address: String
+  +district: String
+  +province: String
+  +postalcode: String
+  +tel: String
+  +region: String
+}
+
+class UserSchema <<Representation>> {
+  +_id: ObjectId
+  +name: String
+  +email: String
+  +role: String
+  +password: String
+  +resetPasswordToken: String
+  +resetPasswordExpire: Date
+  +createdAt: Date
+}
+
+App --> Hotels : /hotels <<Path>>
+App --> Bookings : /bookings <<Path>>
+App --> Auth : /auth <<Path>>
+Auth --> UserSchema : uses 
+Hotels --> Hotel : /{hotelId} <<Path>>
+Hotel --> HotelSchema : uses
+
+Hotel --> Bookings : /bookings <<Path>>
+
+Bookings --> Booking : /{bookingId} <<Path>>
+Booking --> BookingSchema : uses
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+
+header Add Booking
+
+actor user
+participant server <<javaScript>>
+participant bookings <<router>>
+participant bookings. <<controllers>>
+participant Booking <<models>>
+participant hotelsDB <<MongoDB>>
+
+user -> server : req.post('/hotels/:hotel_id/bookings')
+server -> bookings : app.use("/bookings", bookings)
+bookings -> bookings. : addBooking
+bookings. -> Booking : create(req.body)
+Booking -> hotelsDB : BookingSchema
+hotelsDB -> Booking : newBooking
+Booking -> bookings. : newBooking
+bookings. -> user : newBooking
+
+@enduml

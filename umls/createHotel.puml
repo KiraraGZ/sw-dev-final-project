@@ -1,0 +1,25 @@
+@startuml
+
+header Admin Create Hotel
+
+actor user
+participant server <<javaScript>>
+participant hotels <<router>>
+participant hotels. <<controllers>>
+participant Hotel <<models>>
+participant hotelsDB <<MongoDB>>
+
+user -> server : req.post('/hotels')
+server -> hotels : app.use("/hotels", hotels)
+alt is Admin
+    hotels -> hotels. : createHotel
+    hotels. -> Hotel : create(req.body)
+    Hotel -> hotelsDB : HotelSchema
+    hotelsDB -> Hotel : newHotel
+    Hotel -> hotels. : newHotel
+    hotels. -> user : newHotel
+else is not Admin
+    hotels -> user : not authorized to access this route
+end
+
+@enduml

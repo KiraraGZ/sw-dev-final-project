@@ -57,6 +57,7 @@ class UserSchema <<Representation>> {
   +_id: ObjectId
   +name: String
   +email: String
+  +phonenumber: String
   +role: String
   +password: String
   +resetPasswordToken: String

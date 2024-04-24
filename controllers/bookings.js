@@ -3,36 +3,31 @@ const Hotel = require("../models/Hotel");
 
 exports.getBookings = async (req, res, next) => {
   let query;
-  try {
-    if (req.user.role !== "admin") {
-
-      console.log(error);
-      query = Booking.find({ user: req.user.id }).populate({
-        path: "hotel",
-        select: "name province tel",
+  if(req.user.role !== 'admin'){
+      query=Booking.find({user:req.user.id}).populate({
+          path:'hotel',
+          select: 'name province tel'
       });
+  }else {
+      query=Booking.find().populate({
+          path:'hotel',
+          select: 'name province tel'
+      });
+  }
+  try {
+      const bookings = await query;
 
-    } else {
-      console.log(req.params.hotelId);
-      if (req.params.hotelId) {
-        console.log(req.params.hotelId);
-        query = Booking.find({ hotel: req.params.hotelId }).populate({
-          path: "hotel",
-          select: "name province tel",
-        });
-      } else {
-        query = Booking.find().populate({
-          path: "hotel",
-          select: "name province tel",
-        });
-      }
-    }
-
-    const bookings = await query;
-    res.status(200).json({ success: true, count: bookings.length, data: bookings });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Server Error" });
+      res.status(200).json({
+          success:true,
+          count: bookings.length,
+          data:bookings
+      });
+  } catch (err) {
+      console.log(err.stack);
+      return res.status(500).json({
+          success:false,
+          message:"Cannot find Booking"
+      });
   }
 };
 

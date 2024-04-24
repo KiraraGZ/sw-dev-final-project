@@ -3,38 +3,33 @@ const Hotel = require("../models/Hotel");
 const Booking = require("../models/Booking");
 
 exports.getReviews = async (req, res, next) => {
-    let query;
-    try {
-      if (req.user.role !== "admin") {
-  
-        console.log(error);
-        query = Review.find({ user: req.user.id }).populate({
-          path: "hotel",
-          select: "name province tel",
-        });
-  
-      } else {
-        console.log(req.params.hotelId);
-        if (req.params.hotelId) {
-          console.log(req.params.hotelId);
-          query = Review.find({ hotel: req.params.hotelId }).populate({
-            path: "hotel",
-            select: "name province tel",
-          });
-        } else {
-          query = Review.find().populate({
-            path: "hotel",
-            select: "name province tel",
-          });
-        }
-      }
-  
+  let query;
+  if(req.user.role !== 'admin'){
+      query=Review.find({user:req.user.id}).populate({
+          path:'hotel',
+          select: 'name province tel'
+      });
+  }else {
+      query=Review.find().populate({
+          path:'hotel',
+          select: 'name province tel'
+      });
+  }
+  try {
       const reviews = await query;
-      res.status(200).json({ success: true, count: reviews.length, data: reviews });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ success: false, message: "Server Error" });
-    }
+
+      res.status(200).json({
+          success:true,
+          count: reviews.length,
+          data:reviews
+      });
+  } catch (err) {
+      console.log(err.stack);
+      return res.status(500).json({
+          success:false,
+          message:"Cannot find Review"
+      });
+  }
   };
   
   exports.addReview = async (req, res, next) => {
@@ -50,8 +45,19 @@ exports.getReviews = async (req, res, next) => {
       }
 
       const booking = await Booking.findById(req.body.booking)
+
       if((Date.now() - booking.bookDate) / (1000 * 60 * 60 * 24) > 3) {
         return res.status(404).json({success: false, message: `Exceed 3 days with the booking id of ${req.body.booking}`});
+      }
+
+      if(req.user.id != booking.user && req.user.role != "admin") {
+        return res.status(404).json({success: false, message: `Unauthorized access to booking id ${req.body.booking}`});
+      }
+
+      const isreviewed = await Review.find({ booking: req.body.booking });
+
+      if (isreviewed.length > 0) {
+        return res.status(404).json({success: false, message: `You have already reviewed the booking id ${req.params.booking}`});
       }
 
       const review = await Review.create(req.body);
@@ -92,3 +98,34 @@ exports.getReviews = async (req, res, next) => {
       });
     }
   };
+
+  exports.getAverageRating = async (req, res, next) => {
+    try {
+      const reviews = await Review.find({ hotel: req.params.id });
+  
+      if (reviews.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: `No reviews found for the hotel with id ${req.params.id}`,
+        });
+      }
+  
+      const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+      const averageRating = totalRatings / reviews.length;
+  
+      res.status(200).json({
+        success: true,
+        data: {
+          hotelId: req.params.id,
+          averageRating: averageRating.toFixed(1),
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: `Error while calculating average rating`,
+      });
+    }
+  };
+  

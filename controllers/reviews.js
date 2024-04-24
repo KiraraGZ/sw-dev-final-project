@@ -57,7 +57,7 @@ exports.getReviews = async (req, res, next) => {
       const isreviewed = await Review.find({ booking: req.body.booking });
 
       if (isreviewed.length > 0) {
-        return res.status(404).json({success: false, message: `You have already reviewed the booking id ${req.params.booking}`});
+        return res.status(404).json({success: false, message: `You have already reviewed the booking id ${req.body.booking}`});
       }
 
       const review = await Review.create(req.body);

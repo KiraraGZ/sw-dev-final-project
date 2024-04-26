@@ -1,5 +1,4 @@
 const Hotel = require("../models/Hotel");
-const vacCenter = require('../models/VacCenter');
 
 exports.getHotels = async (req, res, next) => {
     try {
@@ -114,16 +113,4 @@ exports.deleteHotel = async (req, res, next) => {
     } catch (err) {
         res.status(400).json({ success:false });
     }
-};
-
-exports.getVacCenters = (req, res, next) => {
-    vacCenter.getAll((err, data) => {
-        if (err) {
-            res.status(500).send({
-                message: err.message || "some err  occurred while retrieving Vaccine centers.",
-            });
-        } else {
-            res.send(data);
-        }
-    });
 };

@@ -1,0 +1,54 @@
+@startuml Co-Working Space Web App Use Case Diagram
+left to right direction
+title Hotel Booking System
+
+rectangle "System" as System {
+    ' User
+    usecase "Register" as Reg
+    usecase "Login" as Login
+    usecase "Get Own User Detail" as GetDetail
+    usecase "Logout" as Logout
+
+    usecase "Get Own Bookings detail" as GBD
+    usecase "Book a Hotel up to 3 nights" as BH
+    usecase "Update Own Bookings" as UOB
+    usecase "Delete Own Bookings" as COB
+
+    usecase "Get Hotels detail" as GHD
+
+    ' Admin
+    usecase "Get User bookings detail" as GUBD
+    usecase "Update User bookings detail" as UUBD
+    usecase "Delete User bookings detail" as DUBD
+
+    usecase "Add Hotel" as AH
+    usecase "Update Hotel" as UH
+    usecase "Delete Hotel" as DH
+}
+
+actor "User" as user
+user -- Reg
+user -- Login
+user -- GetDetail
+user -- Logout
+user -- GBD
+user -- BH
+user -- UOB
+user -- COB
+user -- GHD
+
+actor "Admin" as admin
+Reg -- admin 
+Login -- admin 
+Logout -- admin
+GUBD -- admin
+UUBD -- admin
+DUBD -- admin
+AH -- admin
+UH -- admin 
+DH -- admin 
+
+
+Reg .> Login : include
+
+@enduml
